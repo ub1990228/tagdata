@@ -1,0 +1,285 @@
+﻿<Controls:MetroWindow  x:Class="tagdata.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        mc:Ignorable="d" ResizeMode="CanMinimize"
+        Title="数据工具" Height="600" Width="800">
+
+    <Window.Resources>
+        <Style x:Key="AccentCircleButtonStyle"
+                           BasedOn="{StaticResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                           TargetType="{x:Type ButtonBase}">
+            <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource GrayBrush7}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <DataTemplate x:Key="MenuItemTemplate" DataType="{x:Type Controls:HamburgerMenuIconItem}">
+            <Grid Height="48">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <ContentControl Grid.Column="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Icon}"
+                                    Focusable="False"
+                                    IsTabStop="False" />
+                <TextBlock Grid.Column="1"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Text="{Binding Label}" />
+            </Grid>
+        </DataTemplate>
+
+        <Style x:Key="HamburgerMenuCreatorsStyle"
+                   BasedOn="{StaticResource {x:Type Controls:HamburgerMenu}}"
+                   TargetType="{x:Type Controls:HamburgerMenu}">
+            <Setter Property="PaneBackground" Value="{DynamicResource WhiteBrush}" />
+            <Setter Property="PaneForeground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="ShowSelectionIndicator" Value="True" />
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid x:Name="mask" Height="600" Width="800" Background="Black" Opacity="0.6" Panel.ZIndex="1" Visibility="Hidden">
+            <Controls:ProgressRing Foreground="{DynamicResource AccentColorBrush}" IsActive="True" />
+        </Grid>
+        <Controls:HamburgerMenu x:Name="HamburgerMenuControl"  
+                                        HamburgerWidth="48"
+                                        IsPaneOpen="True"
+                                        ItemInvoked="HamburgerMenuControl_OnItemInvoked"
+                                        ItemTemplate="{StaticResource MenuItemTemplate}"
+                                        OptionsItemTemplate="{StaticResource MenuItemTemplate}"
+                                        SelectedIndex="0"
+                                        Style="{StaticResource HamburgerMenuCreatorsStyle}"
+                                        VerticalScrollBarOnLeftSide="False">
+
+            <Controls:HamburgerMenu.ItemsSource>
+                <Controls:HamburgerMenuItemCollection>
+
+                    <Controls:HamburgerMenuIconItem Icon="{iconPacks:Material Kind=FileFind}" Label="文件查找">
+                        <Controls:HamburgerMenuIconItem.Tag>
+                            <UserControl>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1.1*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Margin="0 18 20 0">输入文件(例如.jpg)</Label>
+                                        <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" Margin="0 20 20 0" x:Name="targetname" Grid.Column="1"></TextBox>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1.1*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Margin="0 18 20 0">输入查找的文件类型</Label>
+                                        <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" Margin="0 20 20 0" x:Name="findname" Grid.Column="1"></TextBox>
+                                    </Grid>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="2" Click="Button_Click">请选择查找文件夹或者上传文件名txt</Button>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" Margin="0 0 20 20" Grid.Row="3" x:Name="targetdir" IsReadOnly="False"></TextBox>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="4" Click="Button_Click_1">请选择被查找的文件夹</Button>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" Margin="0 0 20 20" Grid.Row="5" x:Name="finddir" IsReadOnly="True"></TextBox>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="6" Content="设置输出位置" Click="Button_Click_3"/>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" Margin="0 0 20 20" Grid.Row="7" x:Name="copydir" IsReadOnly="True"/>
+                                    <Button Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" Height="37" Width="37" HorizontalAlignment="Left" Grid.Row="8" Click="Button_Click_2">
+                                        <Button.Content>
+                                            <iconPacks:PackIconModern Width="20"
+                                                      Height="20"
+                                                      Kind="Filter" />
+                                        </Button.Content>
+                                    </Button>
+                                </Grid>
+                            </UserControl>
+                        </Controls:HamburgerMenuIconItem.Tag>
+                    </Controls:HamburgerMenuIconItem>
+
+                    <Controls:HamburgerMenuIconItem Icon="{iconPacks:Material Kind=Patreon}" Label="病症查找">
+                        <Controls:HamburgerMenuIconItem.Tag>
+                            <UserControl>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1.1*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Margin="0 18 20 0">输入需要查找的病症</Label>
+                                        <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="sreach_sy" Margin="0 20 20 0" Grid.Column="1"></TextBox>
+                                        <Label Grid.Column="2" Margin="0 18 20 0">输入阳性还是阴性</Label>
+                                        <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="sreach_sex" Margin="0 20 20 0" Grid.Column="3"></TextBox>
+                                    </Grid>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="1" Click="select_sy_lbl">请选择标签文件夹</Button>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="sreach_sy_lbl" Margin="0 0 20 20" Grid.Row="2" IsReadOnly="True"></TextBox>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="3" Click="select_sy_img">请选择图片文件夹</Button>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="sreach_sy_img" Margin="0 0 20 20" Grid.Row="4" IsReadOnly="True"></TextBox>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="5" Click="select_sy_import">设置输出位置</Button>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="sreach_sy_import" Margin="0 0 20 20" Grid.Row="6" IsReadOnly="True"></TextBox>
+                                    <Button Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" Height="37" Width="37" HorizontalAlignment="Left" Grid.Row="7" Click="sreach">
+                                        <Button.Content>
+                                            <iconPacks:PackIconModern Width="20"
+                                                      Height="20"
+                                                      Kind="Filter" />
+                                        </Button.Content>
+                                    </Button>
+                                </Grid>
+                            </UserControl>
+                        </Controls:HamburgerMenuIconItem.Tag>
+                    </Controls:HamburgerMenuIconItem>
+
+                    <Controls:HamburgerMenuIconItem Icon="{iconPacks:Material Kind=Json}" Label="分类对比">
+                        <Controls:HamburgerMenuIconItem.Tag>
+                            <UserControl>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1.1*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Margin="0 18 20 0">输入需要对比的病症</Label>
+                                        <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="cls_sy" Margin="0 20 20 0" Grid.Column="1"></TextBox>
+                                    </Grid>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="1" Click="cls_lbl">请选择标签文件夹</Button>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="cls_lbl_name" Margin="0 0 20 20" Grid.Row="2" IsReadOnly="True"></TextBox>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="3" Click="c_cls_lbl">请选择需要对比的标签文件夹</Button>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="c_cls_lbl_name" Margin="0 0 20 20" Grid.Row="4" IsReadOnly="True"></TextBox>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="5" Click="cls_img">请选择图片文件夹</Button>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="cls_img_name" Margin="0 0 20 20" Grid.Row="6" IsReadOnly="True"></TextBox>
+                                    <Button Style="{DynamicResource SquareMetroButton}" Grid.Row="7" Click="cls_import">请选择输出位置</Button>
+                                    <TextBox Style="{DynamicResource ButtonCommandMetroTextBox}" x:Name="cls_import_name" Margin="0 0 20 20" Grid.Row="8" IsReadOnly="True"></TextBox>
+                                    <Button Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" Height="37" Width="37" HorizontalAlignment="Left" Grid.Row="9" Click="cls_search">
+                                        <Button.Content>
+                                            <iconPacks:PackIconModern Width="20"
+                                                      Height="20"
+                                                      Kind="Filter" />
+                                        </Button.Content>
+                                    </Button>
+                                </Grid>
+                            </UserControl>
+                        </Controls:HamburgerMenuIconItem.Tag>
+                    </Controls:HamburgerMenuIconItem>
+
+                </Controls:HamburgerMenuItemCollection>
+            </Controls:HamburgerMenu.ItemsSource>
+
+            <Controls:HamburgerMenu.OptionsItemsSource>
+                <Controls:HamburgerMenuItemCollection>
+                    <Controls:HamburgerMenuIconItem Icon="{iconPacks:Material Kind=Book}" Label="查找记录">
+                        <Controls:HamburgerMenuIconItem.Tag>
+                            <UserControl>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="9*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <ScrollViewer Margin="0 2 20 2"
+                                          HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Disabled">
+                                        <ListBox Margin="0 2 20 2"
+                                             x:Name="log_listbox"
+                                             Grid.Row="0"
+                                             BorderThickness="1"
+                                             SelectedIndex="0"
+                                             SelectionMode="Extended"
+                                             Height="350"
+                                             Style="{StaticResource MetroListBox}">
+                                        </ListBox>
+                                    </ScrollViewer>
+                                    <Button Grid.Row="1" Style="{DynamicResource SquareMetroButton}" Click="button_record_import">选择保存位置</Button>
+                                    <TextBox Grid.Row="2" x:Name="record_import" Style="{DynamicResource ButtonCommandMetroTextBox}" Margin="0 0 20 20" IsReadOnly="False"></TextBox>
+                                    <Button Grid.Row="3" Style="{DynamicResource SquareMetroButton}" Click="record_txt">生成当前操作记录</Button>
+                                    <Button Grid.Row="3" Margin="150 0 0 0" Style="{DynamicResource SquareMetroButton}" Click="record_clear">清空当前操作记录</Button>
+                                </Grid>
+                            </UserControl>
+                        </Controls:HamburgerMenuIconItem.Tag>
+                    </Controls:HamburgerMenuIconItem>
+                </Controls:HamburgerMenuItemCollection>
+            </Controls:HamburgerMenu.OptionsItemsSource>
+
+            <Controls:HamburgerMenu.ContentTemplate>
+                <DataTemplate DataType="{x:Type Controls:HamburgerMenuIconItem}">
+                    <Grid Margin="20 0 10 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                       Margin="0 15 0 5"
+                                       Padding="0"
+                                       FontFamily="{DynamicResource HeaderFontFamily}"
+                                       FontSize="{DynamicResource HeaderFontSize}"
+                                       Text="{Binding Label}" />
+                        <ScrollViewer Grid.Row="1"
+                                          Focusable="False"
+                                          HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Auto">
+                            <ContentControl Content="{Binding Tag}" Focusable="False" />
+                        </ScrollViewer>
+                    </Grid>
+                </DataTemplate>
+            </Controls:HamburgerMenu.ContentTemplate>
+
+        </Controls:HamburgerMenu>
+    </Grid>
+</Controls:MetroWindow>
